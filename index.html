@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7529335719399218"
+     crossorigin="anonymous"></script>
+  <style>
+    
+    #game-board {
+      align-items: center;
+      width: 500px;
+      height: 500px;
+      position: relative;
+      background-color: lightblue;
+    }
+    .raindrop {
+      width: 10px;
+      height: 20px;
+      background-color: blue;
+      position: absolute;
+      bottom: 0;
+      left: 250px;
+    }
+    .player {
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      position: absolute;
+      bottom: 20px;
+      left: 250px;
+    }
+  </style>
+</head>
+<body>
+  
+  <div id="game-board"></div>
+
+  <p id="score"></p>
+  <p id="chances"></p>
+  <p> arrow key to move</p>
+  
+  <script>
+    const gameBoard = document.getElementById("game-board");
+    const scoreEl = document.getElementById("score");
+    const chancesEl = document.getElementById("chances");
+    let score = 0;
+    
+
+    var highScore = 0;
+    let chances = 3;
+    let raindrops = [];
+    let playerX = 250;
+    let rainNum  =4;
+
+
+class Player {
+  constructor() {
+    this.el = document.createElement("div");
+    this.el.classList.add("player");
+    gameBoard.appendChild(this.el);
+    
+  }
+}
+
+const player = new Player();
+
+    
+    class Raindrop {
+      constructor() {
+        this.el = document.createElement("div");
+        this.el.classList.add("raindrop");
+        gameBoard.appendChild(this.el);
+        this.reset();
+      }
+      
+      reset() {
+        this.x = Math.random() * 450;
+        this.y = -20;
+        this.speed = Math.random() * 5 + 5;
+      }
+      
+      update() {
+        this.y += this.speed;
+        if (this.y > 500) {
+          this.reset();
+          
+          updateChances();
+          if (chances === 0) {
+            gameOver();
+          }
+        }
+        if (playerX < this.x && this.x < playerX + 20 && this.y > 500 - 20 - 20) {
+          this.reset();
+          chances--;
+          updateChances();
+          if (chances === 0) {
+            gameOver();
+          }
+        }
+        this.el.style.left = this.x + "px";
+        this.el.style.top = this.y + "px";
+      }
+    }
+    
+    function updateChances() {
+      chancesEl.innerHTML = `Chances: ❤️❤️❤️`.slice(0, 9 + chances * 2);
+    }
+    
+    function gameOver() {
+        if (score > highScore) {
+    highScore = score;
+  }
+      alert(`Game over! Your score is ${score} High score is ${highScore}`);
+      for (const raindrop of raindrops) {
+        raindrop.el.remove();
+      }
+       restartButton = document.createElement("button");
+  restartButton.innerHTML = "Restart";
+  restartButton.addEventListener("click", restartGame);
+  document.body.appendChild(restartButton);
+      raindrops = [];
+      playerX = 250;
+      document.removeEventListener("keydown", handleKeyDown);
+    function restartGame() {
+  document.body.removeChild(restartButton);
+  score = 0;
+  chances = 3;
+  updateChances();
+  for (let i = 0; i < rainNum; i++) {
+    raindrops.push(new Raindrop());
+  }
+  document.addEventListener("keydown", handleKeyDown);
+  update();
+}
+    
+    }
+
+    
+    function handleKeyDown(event) {
+      if (event.key === "ArrowLeft") {
+        playerX -= 20;
+      }
+       if (event.key === "ArrowRight") {
+    playerX += 20;
+  }
+  playerX = Math.max(0, playerX);
+playerX = Math.min(450, playerX);
+ player.el.style.left = playerX + "px";
+}
+
+    for (let i = 0; i < rainNum; i++) {
+  raindrops.push(new Raindrop());
+}
+
+document.addEventListener("keydown", handleKeyDown);
+
+function update() {
+  for (const raindrop of raindrops) {
+    raindrop.update();
+  }
+  score++;
+  scoreEl.innerHTML = `Score: ${score}`;
+  requestAnimationFrame(update);
+}
+
+update();
+
+
+
+  </script>
+</body>
+</html>
