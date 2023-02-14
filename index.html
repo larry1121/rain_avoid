@@ -56,13 +56,27 @@
       left: 250px;
     }
     .player {
-      width: 20px;
-      height: 20px;
-      background-color: red;
-      position: absolute;
-      bottom: 20px;
-      left: 250px;
-    }
+  width: 40px;
+  height: 40px;
+  background-color: red;
+  position: absolute;
+  bottom: 20px;
+  left: 230px;
+}
+#copyright {
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        font-size: 12px;
+        color: #999;
+      }
+
+      #copyright:before {
+        content: "Growing Up";
+        font-weight: bold;
+      }
+
+    
   </style>
 </head>
 <body>
@@ -73,7 +87,12 @@
   <p id="chances"></p>
   <p> arrow key to move</p>
   </div>
-  
+   <div id="copyright">
+      &copy; 2023 Growing Up
+    </div>
+  </div>
+  <div id="copyright">
+    &copy; 2023 Growing Up
   </div>
  
   
@@ -88,7 +107,7 @@
     let chances = 3;
     let raindrops = [];
     let playerX = 250;
-    let rainNum  =4;
+    let rainNum  =6;
 
 
 class Player {
@@ -108,16 +127,20 @@ const player = new Player();
         this.el = document.createElement("div");
         this.el.classList.add("raindrop");
         gameBoard.appendChild(this.el);
+        this.speed = 2; // 속도를 상수로 설정
         this.reset();
       }
       
       reset() {
         this.x = Math.random() * 450;
         this.y = -20;
-        this.speed = Math.random() * 5 + 5;
+      
+        this.speed = Math.random() *2 ; 
       }
       
       update() {
+        console.log("update!")
+        
         this.y += this.speed;
         if (this.y > 500) {
           this.reset();
@@ -127,7 +150,7 @@ const player = new Player();
             gameOver();
           }
         }
-        if (playerX < this.x && this.x < playerX + 20 && this.y > 500 - 20 - 20) {
+        if (playerX < this.x && this.x < playerX + 40 && this.y > 500 - 40 - 20) {
           this.reset();
           chances--;
           updateChances();
@@ -149,7 +172,9 @@ const player = new Player();
     highScore = score;
   }
       alert(`Game over! Your score is ${score} High score is ${highScore}`);
+      score = 0;
       for (const raindrop of raindrops) {
+        
         raindrop.el.remove();
       }
       const infoEl = document.getElementById("info");
