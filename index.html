@@ -1,11 +1,47 @@
 <!DOCTYPE html>
 <html>
-<head><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7529335719399218"
+
+<head>
+  <meta charset="UTF-8">
+  <title>비 피하기</title>
+  <meta name="description" content="비를 피해야 합니다.">
+  <meta name="keywords" content="피하기,게임,비,탄막,탄막 피하기">
+  <meta name="author" content="growing-up">
+  <meta property="og:title" content="비 피하기">
+  <meta property="og:description" content="비를 피해야 합니다.">
+  <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/844/844681.png">
+  <meta property="og:url" content="https://serious-memo.netlify.app/">
+  <meta name="twitter:title" content="비 피하기">
+  <meta name="twitter:description" content="비를 피해야 합니다.">
+  <meta name="twitter:image" content="https://cdn-icons-png.flaticon.com/512/844/844681.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7529335719399218"
      crossorigin="anonymous"></script>
   <style>
-    
+       #container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #info {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+    body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
     #game-board {
       align-items: center;
+      justify-content: center;
       width: 500px;
       height: 500px;
       position: relative;
@@ -30,12 +66,16 @@
   </style>
 </head>
 <body>
-  
-  <div id="game-board"></div>
-
-  <p id="score"></p>
+  <div id="container">
+     <div id="game-board"></div>
+  <div id="info">
+    <p id="score"></p>
   <p id="chances"></p>
   <p> arrow key to move</p>
+  </div>
+  
+  </div>
+ 
   
   <script>
     const gameBoard = document.getElementById("game-board");
@@ -112,15 +152,20 @@ const player = new Player();
       for (const raindrop of raindrops) {
         raindrop.el.remove();
       }
-       restartButton = document.createElement("button");
-  restartButton.innerHTML = "Restart";
-  restartButton.addEventListener("click", restartGame);
-  document.body.appendChild(restartButton);
+      const infoEl = document.getElementById("info");
+const restartButton = document.createElement("button");
+restartButton.innerHTML = "Restart";
+restartButton.addEventListener("click", restartGame);
+infoEl.appendChild(restartButton);
+
+  //      restartButton = document.createElement("button");
+  // restartButton.innerHTML = "Restart";
+  // document.body.appendChild(restartButton);
       raindrops = [];
       playerX = 250;
       document.removeEventListener("keydown", handleKeyDown);
     function restartGame() {
-  document.body.removeChild(restartButton);
+      infoEl.removeChild(restartButton);
   score = 0;
   chances = 3;
   updateChances();
@@ -162,6 +207,26 @@ function update() {
 }
 
 update();
+
+function handleTouchStart(event) {
+  const touchX = event.touches[0].clientX;
+  playerX = touchX - gameBoard.getBoundingClientRect().left - 10; // 10 is half the player's width
+  playerX = Math.max(0, playerX);
+  playerX = Math.min(450, playerX);
+  player.el.style.left = playerX + "px";
+}
+
+function handleTouchMove(event) {
+  event.preventDefault();
+  const touchX = event.touches[0].clientX;
+  playerX = touchX - gameBoard.getBoundingClientRect().left - 10; // 10 is half the player's width
+  playerX = Math.max(0, playerX);
+  playerX = Math.min(450, playerX);
+  player.el.style.left = playerX + "px";
+}
+
+gameBoard.addEventListener("touchstart", handleTouchStart);
+gameBoard.addEventListener("touchmove", handleTouchMove);
 
 
 
