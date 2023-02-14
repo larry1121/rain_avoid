@@ -85,15 +85,14 @@
   <div id="info">
     <p id="score"></p>
   <p id="chances"></p>
-  <p> arrow key to move</p>
+  <p> 방향키로 이동</p>
+  <p> (모바일은 드래그로 이동)</p>
   </div>
    <div id="copyright">
       &copy; 2023 Growing Up
     </div>
   </div>
-  <div id="copyright">
-    &copy; 2023 Growing Up
-  </div>
+
  
   
   <script>
@@ -107,7 +106,7 @@
     let chances = 3;
     let raindrops = [];
     let playerX = 250;
-    let rainNum  =6;
+    let rainNum  = 10;
 
 
 class Player {
@@ -127,7 +126,7 @@ const player = new Player();
         this.el = document.createElement("div");
         this.el.classList.add("raindrop");
         gameBoard.appendChild(this.el);
-        this.speed = 2; // 속도를 상수로 설정
+        this.speed = 1; // 속도를 상수로 설정
         this.reset();
       }
       
@@ -135,7 +134,7 @@ const player = new Player();
         this.x = Math.random() * 450;
         this.y = -20;
       
-        this.speed = Math.random() *2 ; 
+        this.speed = Math.random() *2 +1; 
       }
       
       update() {
